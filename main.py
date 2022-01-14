@@ -39,7 +39,7 @@ except ImportError:
 
 # WD: Working Directory
 WD = sys.path[0]
-BOT_NAME = ""
+BOT_NAME = "sixBot"
 RANK_URL = "http://api.yannismate.de/rank/{}/{}?playlists=ranked_3v3&hideDiv=true"
 RANK_URL_2V2 = "http://api.yannismate.de/rank/{}/{}?playlists=ranked_2v2&hideDiv=true"
 PLATFORM = "epic"
