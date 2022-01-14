@@ -1,0 +1,15 @@
+{
+    "name":"",
+    "id":"",
+    "str_id":"",
+    "rl_rank":"",
+    "rank":"",
+    "points":0,
+    "platform":"",
+    "game_id":"",
+    "six_mans":{
+        "wins":0,
+        "loses":0,
+        "current_game":""
+    }
+}

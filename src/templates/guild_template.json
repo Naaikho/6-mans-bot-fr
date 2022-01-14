@@ -1,0 +1,18 @@
+{
+    "id":"",
+    "str_id":"",
+    "name":"",
+    "d_role":"",
+    "channels":{
+        "rank":"",
+        "logs":"",
+        "game_report":"",
+        "commands":"",
+        "d":"",
+        "c":"",
+        "b":"",
+        "a":"",
+        "x":"",
+        "univ-rank":""
+    }
+}
