@@ -198,6 +198,7 @@ async def log(guild, title:str="", log:str="", color=discord.Embed.Empty):
 @client.event
 async def on_ready():
     print("target: {0.user}".format(client))
+    await client.change_presence(activity=discord.Game('!help | By Naikho'))
 
 
 
