@@ -168,7 +168,7 @@ async def getRank(ctx:commands.Context, id:str, mmr:bool=False) -> str:
         break
     return str(userRank)
 
-async def log(guild, title:str="", log:str="", color=discord.Embed.Empty):
+async def log(guild:Union[str, int], title:str="", log:str="", color=discord.Embed.Empty):
     try:
         channel_id = int(sepChar(loadGuildData(guild)["channels"]["logs"], "<#>", ""))
         if(channel_id != "" or channel_id != None):
@@ -203,9 +203,11 @@ async def on_ready():
 
 
 @client.command(name="rank")
-async def setRank(ctx:commands.Context, id:str):
+async def setRank(ctx:commands.Context, *id:str):
     if (ctx.channel.mention != guildAccount(ctx.guild).channels["rank"]):
         return
+    
+    id = "%20".join(id)
 
     user = userAccount(ctx.author)
 
@@ -449,6 +451,46 @@ async def setRole(ctx:commands.Context, role:discord.Role):
 async def setRoleError(ctx:commands.Context, error):
     if isinstance(error, commands.errors.RoleNotFound):
         await ctx.reply(embed=discord.Embed(description="Role introuvable: `!setRole <default_role>`", color=DELETE_AFTER["color"]["error"]), delete_after=DELETE_AFTER["error"])
+    if(isinstance(error, commands.errors.MissingPermissions)):
+        return
+    print_traceback(error)
+    await log(ctx.guild.id, "Error catch", str(error))
+
+
+
+@client.command(name="clear")
+@commands.has_permissions(administrator=True)
+async def clearUser(ctx:commands.Context, user:discord.Member):
+    user:userAccount = userAccount(user)
+    guild:guildAccount = guildAccount(ctx.guild)
+
+    if(user.rank != ""):
+        await user.member.remove_roles(discord.utils.get(user.member.guild.roles, name=ROLES[user.rank]))
+
+    with open(rocketPath("accountId"), "r") as data:
+        accountId = [x.strip() for x in data.readlines()]
+    with open(rocketPath("accountId"), "w") as data:
+        i=0
+        while i < len(accountId):
+            if(user.game_id.lower() == accountId[i].lower()):
+                del accountId[i]
+                break
+            i+=1
+        accountId = "\n".join(accountId)
+        data.write(accountId + "\n")
+
+    user.rl_rank = ""
+    user.rank = ""
+    user.game_id = ""
+    user.save()
+    
+    await ctx.reply(embed=discord.Embed(description="Le joueur {} a été clear de la base de donnée.".format(user.mention), color=DELETE_AFTER["color"]["success"]))
+    await log(ctx.guild.id, log="Le joueur {} a été clear de la base de donnée.".format(user.mention), color=DELETE_AFTER["color"]["success"])
+
+@clearUser.error 
+async def clearUserError(ctx:commands.Context, error):
+    if isinstance(error, commands.errors.RoleNotFound):
+        await ctx.reply(embed=discord.Embed(description="Role introuvable: `!clear <user_mention>`", color=DELETE_AFTER["color"]["error"]), delete_after=DELETE_AFTER["error"])
     if(isinstance(error, commands.errors.MissingPermissions)):
         return
     print_traceback(error)
