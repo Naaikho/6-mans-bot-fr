@@ -402,7 +402,7 @@ async def setChannelError(ctx:commands.Context, error):
 
 
 @client.command(name="setRank")
-@commands.has_permissions(administrator=True, manage_roles=True)
+@commands.has_permissions(administrator=True, manage_messages=True)
 async def setPlayerRank(ctx:commands.Context, player:discord.Member, rank:str):
     rank = rank.upper()
     user_m = userAccount(player)
@@ -459,7 +459,7 @@ async def setRoleError(ctx:commands.Context, error):
 
 
 @client.command(name="clear")
-@commands.has_permissions(administrator=True, manage_roles=True)
+@commands.has_permissions(administrator=True, manage_messages=True)
 async def clearUser(ctx:commands.Context, user:discord.Member):
     user:userAccount = userAccount(user)
     guild:guildAccount = guildAccount(ctx.guild)
