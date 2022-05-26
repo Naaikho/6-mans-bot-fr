@@ -1,3 +1,5 @@
-# 6 mans fr bot
+# 6 Mans FR Discord (Bot)
 
-by naikho
+### Set rank: ✅
+### Queue: ❌
+### LeaderBoard: ❌

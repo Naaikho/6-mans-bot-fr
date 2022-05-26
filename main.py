@@ -78,8 +78,11 @@ if platform.system() == "Windows":
         else:
             mode = "DEFAULT"
 
+PREFIX = "!"
+
 if mode.lower() == "debug":
     token = tokend["testbot"]
+    PREFIX = "$"
     # info = "test"
 if mode.lower() == "default":
     token = tokend[BOT_NAME]
@@ -102,7 +105,7 @@ print("Mode: {}".format(mode.capitalize()))
 # allows the bot to see other members of a server
 intents = discord.Intents.all()
 intents.members = True
-client = commands.Bot(command_prefix="!", intents=intents)
+client = commands.Bot(command_prefix=PREFIX, intents=intents)
 
 delPath = os.path.join(WD, "src", "data")
 for img in os.listdir(delPath):
@@ -286,10 +289,18 @@ async def updateRank(ctx:commands.Context):
     user.rl_rank = await getRank(ctx, user.game_id, mmr=True)
     user.rank = await getRank(ctx, user.game_id)
 
+    guild = guildAccount(ctx.guild)
+    if(guild.getDefaultRole() not in user.member.roles):
+        await user.member.add_roles(guild.getDefaultRole())
+
     if(user.rank == ""):
         emb = discord.Embed(title="Rank trop bas... 😢".format(user.rank), description="Votre rank est malheureusement trop bas pour rejoindre un rank... **(Champion 1 minimum)**\nCependant, rendez-vous ici pour commencer à jouer: {}".format(guildAccount(ctx.guild).channels["univ-rank"]), color=DELETE_AFTER["color"]["error"])
         await ctx.reply(embed=emb)
         return
+    
+    rankRole:discord.Role = discord.utils.get(member.guild.roles, name=ROLES[oldRank])
+    if(rankRole not in user.member.roles):
+        await user.member.add_roles(rankRole)
 
     member:discord.Member = ctx.message.author
     if(oldRank == user.rank):
