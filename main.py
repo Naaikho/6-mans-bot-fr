@@ -357,6 +357,18 @@ async def muteRankError(ctx:commands.Context, error):
 
 
 
+@client.command(name="queue")
+async def queue(ctx:commands.Context):
+    pass
+
+@queue.error 
+async def queueError(ctx:commands.Context, error):
+    print_traceback(error)
+    await log(ctx.guild.id, "Error catch", str(error))
+
+
+
+
 
 
 
@@ -495,7 +507,6 @@ async def clearUserError(ctx:commands.Context, error):
         return
     print_traceback(error)
     await log(ctx.guild.id, "Error catch", str(error))
-
 
 
 
